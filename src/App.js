@@ -1,52 +1,57 @@
 
 import './App.css';
-import { useState} from "react";
+import { useState,useEffect} from "react";
 import Axios from "axios";
+import List from "./components/List.js"
 
 function App() {
   const [name, setName] = useState("");
+  const [count, setCount]=useState(0);
+  const [fruit, setFruit]=useState('banana');
+  const [todos, setTodos]=useState([{text:'Learn Hooks'}]);
+  const [catFact, setCatFact] = useState([]);
+  const [characterData, setCharacterData] = useState([]);
   const [predictedAge, setPredictedAge] = useState(null);
-  const [characterData, setCharacterData] = useState({});
 
 
-  const fetchData = () => {
-      Axios.get(`https://swapi.dev/api/people/?search=${name}`)
-      .then((res) => {
-        const data = res.data.results;
-        if (data) {
-          setCharacterData({
-            name: data.name,
-            birthYear: data.birth_year
-          });
-        } else {
-          // Handle the situation where the search returns no results
-          alert('No character found!');
-          setCharacterData({});
-        }
-      })
-      .catch((error) => {
-        // You can handle any errors here
-      console.error("Error fetching data:", error);
-      });
-    };
+useEffect(()=>{
+  Axios.get("https://swapi.dev/api/people")
+  .then((res) => {
+    // Assuming you want to store the results array in characterData
+    console.log(res.data)
+    setCharacterData(res.data.results);
+
+  })
+  .catch(error => console.error("Failed to fetch characters:", error));
+},[]);
+
+      const handleNameChange = (event) => {
+        setName(event.target.value);
+      };
+      const fetchData = () => {
+        Axios.get("https://swapi.dev/api/people")
+          .then((res) => {
+            setCharacterData(res.data.results);
+          })
+          .catch(error => console.error("Error fetching character data:", error));
+      };
 
 
   return (
     <div className="App">
+      <p>you clicked{count}times</p>
+      <button onClick={()=>setCount(count + 1)}>Click me</button>
         <input
           placeholder= "EX.Kang..."
-          onChange={(event) => {
-            setName(event.target.value);
-          }}
+          onChange={handleNameChange}
         />
-        <button onClick = {fetchData}>prodict Age</button>
-        <div>{fetchData}</div>
-          <button>Generate Cat Fact!</button>
-          <h1>Name:{predictedAge?.name}</h1>
-          <h1>Age:{predictedAge?.age}</h1>
-          <h1>color:{predictedAge?.color}</h1>
-          {characterData.name && <h1>Name: {characterData.name}</h1>}
-          {characterData.birthYear && <h1>Birth Year: {characterData.birthYear}</h1>}
+        <div>
+         <p><button onClick={fetchData}> Generate Cat Fact </button></p>
+         <p>{catFact}</p>
+        </div>
+        <button >Predict Age</button>
+        <List characterData={characterData} />
+
     </div>
   );
 }
