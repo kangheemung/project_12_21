@@ -1,56 +1,40 @@
 
 import './App.css';
 import { useState,useEffect} from "react";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Axios from "axios";
 import List from "./components/List.js"
-
+import Click from "./components/Click.js"
+import Input from "./components/Input.js"
+import FetchCatFact from "./components/FetchCatFact.js"
+import{Home} from "./pages/Home";
+import{Menu} from "./pages/Menu";
+import{Contact} from "./pages/Contact";
+import{Navbar} from "./Navbar";
 function App() {
-  const [name, setName] = useState("");
-  const [count, setCount]=useState(0);
   const [fruit, setFruit]=useState('banana');
   const [todos, setTodos]=useState([{text:'Learn Hooks'}]);
-  const [catFact, setCatFact] = useState([]);
-  const [characterData, setCharacterData] = useState([]);
   const [predictedAge, setPredictedAge] = useState(null);
 
 
-useEffect(()=>{
-  Axios.get("https://swapi.dev/api/people")
-  .then((res) => {
-    // Assuming you want to store the results array in characterData
-    console.log(res.data)
-    setCharacterData(res.data.results);
-
-  })
-  .catch(error => console.error("Failed to fetch characters:", error));
-},[]);
-
-      const handleNameChange = (event) => {
-        setName(event.target.value);
-      };
-      const fetchData = () => {
-        Axios.get("https://swapi.dev/api/people")
-          .then((res) => {
-            setCharacterData(res.data.results);
-          })
-          .catch(error => console.error("Error fetching character data:", error));
-      };
 
 
   return (
     <div className="App">
-      <p>you clicked{count}times</p>
-      <button onClick={()=>setCount(count + 1)}>Click me</button>
-        <input
-          placeholder= "EX.Kang..."
-          onChange={handleNameChange}
-        />
-        <div>
-         <p><button onClick={fetchData}> Generate Cat Fact </button></p>
-         <p>{catFact}</p>
-        </div>
+      <Router>
+       <Navbar/>
+        <Routes>
+          <Route path="/" element={<Home/>}/>
+          <Route path="/menu" element={<Menu/>}/>
+          <Route path="/contact" element={<Contact/>}/>
+          <Route path="*" element={<h1>page no found</h1>} />
+        </Routes>
+      </Router>
+        <Click/>
+        <Input/>
         <button >Predict Age</button>
-        <List characterData={characterData} />
+        <FetchCatFact/>
+        <List />
 
     </div>
   );
