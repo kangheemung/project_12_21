@@ -19,10 +19,29 @@ function App() {
   const [todos, setTodos]=useState([{text:'Learn Hooks'}]);
   const [predictedAge, setPredictedAge] = useState(null);
   const [username, setUsername] = useState("kang");
+  //const [state,setState] = useState();
 
 
-
-
+ //const TopComponent = () => {
+   // const[state,setState] = useState();
+  //return (
+    //<div>
+     // <MidleDomponent state={state} />
+    //</div>
+  //);
+//};
+//const MiddleComponent = (state) => {
+ // return(
+  //  <div>
+   //   <ButtomComponet state={state}/>
+    //</div>
+ // );
+//};
+//const BottomComponent =(state)=>{
+  //return <div>
+    //        {state}
+    //   </div>;
+//};
   return (
     <div className="App">
     <AppContext.Provider value={{username,setUsername}}>
